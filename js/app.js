@@ -72,7 +72,7 @@
     $('#f-cat').value = F.cat;
   }
   function syncControls() { $('#f-q').value = F.q; $('#f-cat').value = F.cat; $('#f-price').value = F.price; $('#f-avail').value = F.avail; $('#f-sort').value = F.sort; $('#f-feat').checked = F.featured; }
-  function refreshAll() { products = SG.store.getProducts(); renderCats(); renderFeatured(); renderCatalogue(); renderProjects(); renderTesti(); pkg.render(); updateCmpTray(); }
+  function refreshAll() { products = SG.pub.products(); renderCats(); renderFeatured(); renderCatalogue(); renderProjects(); renderTesti(); pkg.render(); updateCmpTray(); }
 
   /* ---------- product detail ---------- */
   function detail(p) {
@@ -150,13 +150,13 @@
 
   /* ---------- projects & testimonials ---------- */
   function renderProjects() {
-    const all = SG.store.getProjects(), types = ['All', ...SG.projectTypes];
+    const all = SG.pub.projects(), types = ['All', ...SG.projectTypes];
     $('#proj-filters').innerHTML = types.map(t => `<button type="button" class="chip ${projFilter === t ? 'on' : ''}" data-g="pf" data-t="${E(t)}" aria-pressed="${projFilter === t}">${E(t)}</button>`).join('');
     const list = all.filter(p => projFilter === 'All' || p.type === projFilter);
     $('#proj-grid').innerHTML = list.length ? list.map(p => `<article class="jcard" data-id="${E(p.id)}"><button type="button" class="jimg" data-g="pview" aria-label="View project ${E(p.title)}">${SG.img(p.image, p.title)}<span class="tag">Sample project</span></button><div class="jbody"><span class="pcat">${E(p.type || 'Project')}</span><h3>${E(p.title)}</h3><p class="muted small">${E(p.location || '')}${p.capacity ? ' · ' + E(p.capacity) : ''}</p><button class="btn small ghost" type="button" data-g="pview">View project</button></div></article>`).join('') : '<div class="empty"><h3>No projects in this category</h3><p>Choose another filter.</p></div>';
   }
   function projectDetail(id) {
-    const p = SG.store.getProjects().find(x => x.id === id); if (!p) return;
+    const p = SG.pub.projects().find(x => x.id === id); if (!p) return;
     const d = SG.dialog.open(`<div class="pdetail"><div class="pd-img">${SG.img(p.image, p.title)}</div><div class="pd-info"><span class="pcat">${E(p.type)} · Sample demonstration project</span><h2>${E(p.title)}</h2>
       <dl class="specs"><div><dt>Location</dt><dd>${E(p.location)}</dd></div><div><dt>System</dt><dd>${E(p.capacity)}</dd></div><div><dt>Type</dt><dd>${E(p.type)}</dd></div></dl><p>${E(p.description)}</p>
       <p class="muted small">Demonstration record. Not work completed by a real company.</p><div class="row"><button class="btn primary" id="pj-q" type="button">Request a similar system</button></div></div></div>`, { wide: true });

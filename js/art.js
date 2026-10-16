@@ -64,6 +64,7 @@ ${grid(235, 190, 280, 62, 8, 2, -22)}${windows(215, 320, 200, 70, 3, 1)}<rect x=
       v = String(v || '');
       if (v.startsWith('art:')) { const p = v.split(':'); return product(p[1], p.slice(2).join(':')); }
       if (v.startsWith('scene:')) return scene(v.slice(6));
+      if (v.startsWith('img:')) { const n = Number(v.slice(4)); return SG.images ? SG.images.url(n) : product('system', ''); }
       if (v.startsWith('data:image/') || /^[\w./-]+\.(png|jpe?g|webp|svg)$/i.test(v)) return v;
       return product('system', '');
     }
